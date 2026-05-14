@@ -40,45 +40,40 @@ function App() {
 
   return (
     <div className="app-shell">
-      <header>
-        <h1>Grama-Urja</h1>
-        <p className="tagline">Crowdsourced rural power alerts</p>
+      <header className="hero">
+        <div>
+          <p className="eyebrow">Grama-Urja</p>
+          <h1>Smart village power alerts</h1>
+          <p className="tagline">Know when your pump can run using community-powered updates.</p>
+        </div>
+        <div className="hero-pulse">{selectedZone}</div>
       </header>
 
-      <section className="card">
-        <label htmlFor="zone-select">Transformer Zone</label>
-        <select
-          id="zone-select"
-          value={selectedZone}
-          onChange={(e) => setSelectedZone(e.target.value)}
-        >
-          {zones.map((zone) => (
-            <option key={zone} value={zone}>
-              {zone}
-            </option>
-          ))}
-        </select>
-      </section>
+      <section className="status-panel">
+        <div className={`status-card ${powerOn ? 'status-on' : 'status-off'}`}>
+          <div className="status-label">Current status</div>
+          <div className="status-value">{powerOn ? 'ON' : 'OFF'}</div>
+          <div className="status-freshness">{freshness}</div>
+        </div>
 
-      <section className={`status-card ${powerOn ? 'status-on' : 'status-off'}`}>
-        <div className="status-label">Power Status</div>
-        <div className="status-value">{powerOn ? 'ON' : 'OFF'}</div>
-        <div className="freshness">Updated: {freshness}</div>
-      </section>
-
-      <section className="button-row">
-        <button className="btn btn-on" onClick={() => handleToggle(true)}>
-          Power is ON
-        </button>
-        <button className="btn btn-off" onClick={() => handleToggle(false)}>
-          Power is OFF
-        </button>
+        <div className="action-card">
+          <div className="action-title">Broadcast your update</div>
+          <div className="action-text">Tap a status button to notify your zone. Power changes are visible immediately to your community.</div>
+          <div className="button-row">
+            <button className="btn btn-on" onClick={() => handleToggle(true)}>
+              Power is ON
+            </button>
+            <button className="btn btn-off" onClick={() => handleToggle(false)}>
+              Power is OFF
+            </button>
+          </div>
+        </div>
       </section>
 
       <section className="card">
-        <h2>Pump Timer</h2>
+        <div className="section-heading">Pump Timer</div>
         <div className="field-row">
-          <label htmlFor="crop-select">Crop Type</label>
+          <label htmlFor="crop-select">Crop type</label>
           <select
             id="crop-select"
             value={cropType}
@@ -93,7 +88,7 @@ function App() {
         </div>
 
         <div className="field-row">
-          <label htmlFor="duration-input">Duration (minutes)</label>
+          <label htmlFor="duration-input">Run duration</label>
           <input
             id="duration-input"
             type="number"
@@ -103,14 +98,20 @@ function App() {
           />
         </div>
 
-        <div className="timer-summary">
-          Recommended run time for {cropType}: {preset} minutes
+        <div className="timer-summary-grid">
+          <div className="timer-summary-card">
+            <span>Recommended</span>
+            <strong>{preset} mins</strong>
+          </div>
+          <div className="timer-summary-card">
+            <span>Selected</span>
+            <strong>{timerMinutes} mins</strong>
+          </div>
         </div>
-        <div className="timer-summary">Selected run time: {timerMinutes} minutes</div>
       </section>
 
-      <footer>
-        <p>High-contrast interface for outdoor visibility.</p>
+      <footer className="footer-note">
+        Built for bright fields, fast decisions, and easy community alerts.
       </footer>
     </div>
   );

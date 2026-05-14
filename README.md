@@ -57,6 +57,17 @@ To deploy:
 2. Run `vercel` from the project root.
 3. Follow the prompts to connect your account and deploy.
 
+## GitHub Actions Auto Deploy
+
+The `.github/workflows/deploy.yml` workflow will automatically build the app on every push to `main`.
+
+To deploy automatically to Netlify, add the following GitHub repository secrets:
+
+- `NETLIFY_AUTH_TOKEN`
+- `NETLIFY_SITE_ID`
+
+When those secrets are configured, the workflow will deploy the built `dist` folder to Netlify.
+
 ## Notes
 
 - The app is a static single-page app built with Vite.

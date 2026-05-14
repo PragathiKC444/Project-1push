@@ -1,60 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
+    android:background="@color/background"
     tools:context=".ZoneSelectionActivity">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/zone_selection"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="@color/text_primary"
-        android:layout_marginBottom="20dp"
-        android:gravity="center" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Select your transformer zone to receive updates"
-        android:textSize="14sp"
-        android:textColor="@color/text_secondary"
-        android:layout_marginBottom="20dp" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/zone_list"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginBottom="20dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:padding="20dp">
 
-        <Button
-            android:id="@+id/btn_zone_cancel"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:layout_marginEnd="10dp"
-            android:text="@string/cancel"
-            android:textSize="16sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/zone_selection"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:textColor="@color/primary"
+            android:layout_marginBottom="10dp" />
 
-        <Button
-            android:id="@+id/btn_zone_confirm"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:text="@string/confirm"
-            android:textSize="16sp"
-            android:background="@color/primary"
-            android:textColor="@color/text_primary" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select a transformer zone for instant power alerts."
+            android:textSize="15sp"
+            android:textColor="@color/text_secondary"
+            android:layout_marginBottom="20dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/info_box_bg"
+            android:padding="16dp"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tap a zone to select it, then confirm."
+                android:textSize="14sp"
+                android:textColor="@color/text_primary" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/zone_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btn_zone_cancel"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/btn_secondary"
+                android:text="@string/cancel"
+                android:textSize="16sp"
+                android:textColor="@color/text_primary" />
+
+            <Button
+                android:id="@+id/btn_zone_confirm"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:background="@drawable/btn_primary"
+                android:text="@string/confirm"
+                android:textSize="16sp"
+                android:textColor="@color/text_primary" />
+        </LinearLayout>
+
     </LinearLayout>
-
-</LinearLayout>
+</ScrollView>

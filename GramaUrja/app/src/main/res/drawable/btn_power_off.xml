@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/power_off_bg" />
-    <corners android:radius="8dp" />
-    <stroke
-        android:color="#660000"
-        android:width="2dp" />
+    <gradient
+        android:startColor="#ef5350"
+        android:endColor="#c62828"
+        android:angle="135" />
+    <corners android:radius="16dp" />
+    <padding android:left="18dp" android:top="12dp" android:right="18dp" android:bottom="12dp" />
 </shape>
