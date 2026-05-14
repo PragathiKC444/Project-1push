@@ -12,170 +12,462 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Grama-Urja"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:textColor="@color/primary"
-            android:layout_marginBottom="6dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Know when your zone has power, without walking to the field."
-            android:textSize="14sp"
-            android:textColor="@color/text_secondary"
-            android:layout_marginBottom="24dp" />
-
+        <!-- Top bar -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="18dp">
 
             <TextView
-                android:id="@+id/zone_name"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:gravity="center"
+                android:text="☰"
+                android:textSize="20sp"
+                android:background="@drawable/btn_secondary"
+                android:textColor="@color/text_primary" />
+
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Zone: Village Main"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_primary" />
+                android:orientation="vertical"
+                android:paddingStart="16dp">
 
-            <Button
-                android:id="@+id/btn_change_zone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="12dp"
-                android:background="@drawable/btn_change_zone"
-                android:text="Change Zone"
-                android:textAllCaps="false"
-                android:textSize="13sp"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Grama-Urja"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/primary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Community power. Better farming."
+                    android:textSize="13sp"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginTop="2dp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:gravity="center"
+                android:text="🔔"
+                android:textSize="20sp"
+                android:background="@drawable/btn_secondary"
                 android:textColor="@color/text_primary" />
         </LinearLayout>
 
-        <FrameLayout
+        <!-- Zone card -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="220dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/status_box_bg"
-            android:id="@+id/status_container">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="18dp"
+            android:background="@drawable/card_bg"
+            android:layout_marginBottom="18dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/your_zone"
+                android:textSize="14sp"
+                android:textColor="@color/text_secondary"
+                android:textStyle="bold"
+                android:layout_marginBottom="10dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:padding="24dp">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
                 <TextView
-                    android:id="@+id/status_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Power Status"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_primary"
-                    android:layout_marginBottom="10dp" />
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:gravity="center"
+                    android:text="📍"
+                    android:textSize="20sp"
+                    android:background="@drawable/btn_secondary"
+                    android:textColor="@color/primary" />
 
-                <TextView
-                    android:id="@+id/status_value"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="OFF"
-                    android:textSize="52sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/power_off_text" />
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingStart="14dp">
+
+                    <TextView
+                        android:id="@+id/zone_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Rampur Village"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary" />
+
+                    <TextView
+                        android:id="@+id/zone_subtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Transformer: TR-05"
+                        android:textSize="14sp"
+                        android:textColor="@color/text_secondary"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
             </LinearLayout>
-        </FrameLayout>
+        </LinearLayout>
 
+        <!-- Power card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/card_bg"
+            android:padding="22dp"
+            android:layout_marginBottom="18dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Current Power Status"
+                android:textSize="12sp"
+                android:textAllCaps="true"
+                android:textColor="@color/text_secondary"
+                android:layout_marginBottom="14dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="POWER IS"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_secondary"
+                    android:letterSpacing="0.08" />
+
+                <TextView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:text="⚡"
+                    android:textSize="24sp"
+                    android:background="@drawable/btn_secondary"
+                    android:textColor="@color/primary" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/status_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ON"
+                android:textSize="54sp"
+                android:textStyle="bold"
+                android:textColor="@color/power_on_bg"
+                android:layout_marginTop="12dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Confirmed by 23 users in your zone"
+                    android:textSize="13sp"
+                    android:textColor="@color/text_secondary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Thank you! 💛"
+                    android:textSize="13sp"
+                    android:textColor="@color/primary" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Live info -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_marginBottom="20dp"
             android:padding="16dp"
-            android:background="@drawable/info_box_bg">
+            android:background="@drawable/btn_secondary"
+            android:layout_marginBottom="18dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="⏱️ Last seen: 10 minutes ago"
+                android:textSize="14sp"
+                android:textColor="@color/text_primary" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/last_updated"
-                android:textSize="15sp"
-                android:textColor="@color/text_secondary"
-                android:layout_marginEnd="10dp" />
-
-            <TextView
-                android:id="@+id/freshness"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Just now"
-                android:textSize="15sp"
+                android:text="• LIVE"
+                android:textSize="14sp"
                 android:textStyle="bold"
-                android:textColor="@color/text_primary" />
-
-            <View
-                android:layout_width="14dp"
-                android:layout_height="14dp"
-                android:background="@drawable/status_indicator_off"
-                android:id="@+id/live_indicator" />
+                android:textColor="@color/power_on_bg"
+                android:padding="8dp"
+                android:background="@drawable/live_chip" />
         </LinearLayout>
 
+        <!-- Update status -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/card_bg"
+            android:padding="18dp"
+            android:layout_marginBottom="18dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/update_power_status"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
+                android:layout_marginBottom="16dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:layout_marginBottom="16dp">
+
+                <Button
+                    android:id="@+id/btn_power_off"
+                    android:layout_width="0dp"
+                    android:layout_height="72dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="10dp"
+                    android:text="@string/power_off"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/btn_status_off"
+                    android:textColor="@color/text_primary" />
+
+                <Button
+                    android:id="@+id/btn_power_on"
+                    android:layout_width="0dp"
+                    android:layout_height="72dp"
+                    android:layout_weight="1"
+                    android:text="@string/power_on"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/btn_status_on"
+                    android:textColor="@color/power_on_text" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/status_help"
+                android:textSize="14sp"
+                android:textColor="@color/text_secondary"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <!-- Pump timer -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/card_bg"
+            android:padding="18dp"
+            android:layout_marginBottom="18dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/pump_timer"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
+                android:layout_marginBottom="14dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="18dp">
+
+                <TextView
+                    android:layout_width="54dp"
+                    android:layout_height="54dp"
+                    android:gravity="center"
+                    android:text="🚜"
+                    android:textSize="24sp"
+                    android:background="@drawable/btn_secondary"
+                    android:textColor="@color/primary" />
+
+                <Spinner
+                    android:id="@+id/crop_spinner"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="14dp"
+                    android:background="@drawable/input_bg" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/recommended_duration"
+                android:textSize="14sp"
+                android:textColor="@color/text_secondary"
+                android:layout_marginBottom="6dp" />
+
+            <TextView
+                android:id="@+id/timer_display"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1 hr 30 mins"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="@color/power_on_bg"
+                android:layout_marginBottom="6dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/optimal_irrigation"
+                android:textSize="14sp"
+                android:textColor="@color/text_secondary"
+                android:layout_marginBottom="16dp" />
+
+            <Button
+                android:id="@+id/btn_pump_timer"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="@string/start_timer"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:background="@drawable/btn_primary"
+                android:textColor="@color/power_on_text" />
+        </LinearLayout>
+
+        <!-- Quick actions -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="20dp"
-            android:gravity="center">
+            android:weightSum="4"
+            android:gravity="center"
+            android:layout_marginBottom="16dp">
 
-            <Button
-                android:id="@+id/btn_power_on"
+            <TextView
                 android:layout_width="0dp"
-                android:layout_height="60dp"
+                android:layout_height="90dp"
                 android:layout_weight="1"
-                android:layout_marginEnd="10dp"
-                android:text="@string/power_on"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:background="@drawable/btn_power_on"
-                android:textColor="@color/text_primary" />
+                android:background="@drawable/action_card"
+                android:text="@string/my_community"
+                android:textSize="12sp"
+                android:textColor="@color/text_primary"
+                android:gravity="center"
+                android:padding="10dp" />
 
-            <Button
-                android:id="@+id/btn_power_off"
+            <TextView
                 android:layout_width="0dp"
-                android:layout_height="60dp"
+                android:layout_height="90dp"
                 android:layout_weight="1"
-                android:text="@string/power_off"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:background="@drawable/btn_power_off"
-                android:textColor="@color/text_primary" />
+                android:layout_marginStart="10dp"
+                android:background="@drawable/action_card"
+                android:text="@string/power_history"
+                android:textSize="12sp"
+                android:textColor="@color/text_primary"
+                android:gravity="center"
+                android:padding="10dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="90dp"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/action_card"
+                android:text="@string/irrigation_tips"
+                android:textSize="12sp"
+                android:textColor="@color/text_primary"
+                android:gravity="center"
+                android:padding="10dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="90dp"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/action_card"
+                android:text="@string/help_support"
+                android:textSize="12sp"
+                android:textColor="@color/text_primary"
+                android:gravity="center"
+                android:padding="10dp" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/btn_pump_timer"
+        <!-- Bottom navigation -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:text="@string/pump_timer"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:background="@drawable/btn_primary"
-            android:textColor="@color/text_primary"
-            android:layout_marginBottom="24dp" />
+            android:layout_height="72dp"
+            android:orientation="horizontal"
+            android:background="@drawable/bottom_nav_bg"
+            android:gravity="center"
+            android:padding="12dp">
 
-        <ProgressBar
-            android:id="@+id/sync_progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone"
-            android:layout_marginTop="8dp" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/home"
+                android:textColor="@color/primary"
+                android:textSize="12sp" />
 
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/map"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/alerts"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/profile"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>
