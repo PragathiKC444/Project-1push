@@ -18,4 +18,20 @@
     <string name="power_on_notification">Power has returned! Update your status!</string>
     <string name="error_no_internet">No internet connection</string>
     <string name="loading">Loading...</string>
+    <string name="your_zone">Your Zone</string>
+    <string name="transformer_label">Transformer: %1$s</string>
+    <string name="confirmed_users">Confirmed by %1$d users in your zone</string>
+    <string name="live_label">LIVE</string>
+    <string name="update_power_status">Update Power Status</string>
+    <string name="status_help">Your update helps the whole community!</string>
+    <string name="recommended_duration">Recommended Duration</string>
+    <string name="optimal_irrigation">For optimal irrigation</string>
+    <string name="power_history">Power History</string>
+    <string name="my_community">My Community</string>
+    <string name="irrigation_tips">Irrigation Tips</string>
+    <string name="help_support">Help & Support</string>
+    <string name="home">Home</string>
+    <string name="map">Map</string>
+    <string name="alerts">Alerts</string>
+    <string name="profile">Profile</string>
 </resources>
