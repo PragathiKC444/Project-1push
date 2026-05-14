@@ -1,6 +1,7 @@
 [build]
   command = "npm run build"
   publish = "dist"
+  base = "."
 
 [dev]
   command = "npm run dev -- --host=0.0.0.0 --port=8888"
