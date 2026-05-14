@@ -201,6 +201,14 @@ function App() {
             },
             ...current,
           ]);
+
+          fetch(`${apiBase}/api/status`)
+            .then((res) => res.json())
+            .then((updatedStatus) => setStatus(updatedStatus))
+            .catch((error) => {
+              console.error('Failed to refresh status after timer finished', error);
+            });
+
           return 0;
         }
         return prev - 1;
