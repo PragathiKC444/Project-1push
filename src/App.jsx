@@ -30,6 +30,8 @@ function App() {
   const [cropType, setCropType] = useState(cropPresets[0].name);
   const [customMinutes, setCustomMinutes] = useState('90');
   const [selectedZone, setSelectedZone] = useState(zones[0]);
+  const [timerActive, setTimerActive] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState(0);
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -42,7 +44,7 @@ function App() {
   }, [status]);
 
   const preset = cropPresets.find((item) => item.name === cropType)?.minutes || 30;
-  const timerMinutes = customMinutes || preset;
+  const timerMinutes = Number(customMinutes || preset);
 
   useEffect(() => {
     if (!loggedIn) return;
@@ -111,6 +113,9 @@ function App() {
     setNotifications([]);
     setMapZones([]);
     setStatus(null);
+    setTimerActive(false);
+    setTimeRemaining(0);
+    setMessage('Logged out successfully.');
   };
 
   const handleToggle = async (value) => {
@@ -130,24 +135,80 @@ function App() {
     }
   };
 
+  const handleNotificationClick = (note) => {
+    setView('alerts');
+    setMessage(note.message);
+  };
+
   const handleSelectZone = () => {
     setView('map');
     setMessage('Select a zone from the map overview.');
   };
 
-  const handleStartTimer = () => {
+  const handleStartTimer = async () => {
     const minutes = Number(timerMinutes);
-    setMessage(`Pump timer started for ${minutes} minutes in ${selectedZone}.`);
-    setStatus((current) => ({
-      ...current,
-      lastUpdated: new Date().toISOString(),
-    }));
+    if (minutes <= 0) {
+      setMessage('Enter a timer duration greater than zero.');
+      return;
+    }
+
+    try {
+      const response = await fetch(`${apiBase}/api/timer`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ zone: selectedZone, crop: cropType, minutes }),
+      });
+      const timerData = await response.json();
+      setTimerActive(true);
+      setTimeRemaining(timerData.minutes * 60);
+      setMessage(`Pump timer started for ${timerData.minutes} minutes in ${selectedZone}.`);
+      setStatus((current) => ({
+        ...current,
+        lastUpdated: new Date().toISOString(),
+      }));
+    } catch (error) {
+      console.error(error);
+      setMessage('Unable to start timer. Try again later.');
+    }
   };
 
   const handleQuickAction = (action) => {
     setMessage(`Opening ${action.replace('-', ' ')}.`);
     setView(action);
   };
+
+  useEffect(() => {
+    if (!timerActive || timeRemaining <= 0) return;
+
+    const interval = setInterval(() => {
+      setTimeRemaining((prev) => {
+        if (prev <= 1) {
+          setTimerActive(false);
+          setMessage(`Pump timer finished for ${selectedZone}.`);
+          setNotifications((current) => [
+            {
+              id: `n${Date.now()}`,
+              title: 'Irrigation complete',
+              message: `Your ${selectedZone} pump timer has completed successfully.`,
+              time: 'Just now',
+              type: 'timer',
+            },
+            ...current,
+          ]);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [timerActive, timeRemaining, selectedZone]);
+
+  useEffect(() => {
+    if (!message) return;
+    const timer = setTimeout(() => setMessage(''), 6000);
+    return () => clearTimeout(timer);
+  }, [message]);
 
   const renderHome = () => (
     <>
@@ -231,13 +292,25 @@ function App() {
           </div>
         </div>
 
+        <div className="timer-input-row">
+          <label>
+            Duration (mins)
+            <input
+              type="number"
+              min="5"
+              value={customMinutes}
+              onChange={(e) => setCustomMinutes(e.target.value)}
+            />
+          </label>
+        </div>
+
         <div className="timer-summary">
           <div>
-            <div className="timer-summary-label">Recommended Duration</div>
-            <div className="timer-summary-value">{preset} mins</div>
+            <div className="timer-summary-label">Planned duration</div>
+            <div className="timer-summary-value">{timerMinutes} mins</div>
           </div>
           <button className="btn start-timer" type="button" onClick={handleStartTimer}>
-            START TIMER
+            {timerActive ? 'RESTART TIMER' : 'START TIMER'}
           </button>
         </div>
 
@@ -271,6 +344,10 @@ function App() {
     <section className="map-view">
       <div className="section-heading">Zone map overview</div>
       <div className="map-summary">Selected zone: {selectedZone}</div>
+      <div className="info-card map-info-card">
+        <div>Tap any zone to make it the active irrigation area.</div>
+        <div>Current pump timer: {timerActive ? `${Math.floor(timeRemaining / 60)}:${String(timeRemaining % 60).padStart(2, '0')} remaining` : 'Not active'}</div>
+      </div>
       <div className="map-grid">
         {mapZones.map((zone) => (
           <button
@@ -307,11 +384,16 @@ function App() {
     <section className="alerts-view">
       <div className="section-heading">Notifications</div>
       {notifications.map((note) => (
-        <div key={note.id} className="notification-card">
+        <button
+          key={note.id}
+          type="button"
+          className="notification-card"
+          onClick={() => handleNotificationClick(note)}
+        >
           <div className="notification-title">{note.title}</div>
           <div className="notification-time">{note.time}</div>
           <p className="notification-message">{note.message}</p>
-        </div>
+        </button>
       ))}
     </section>
   );

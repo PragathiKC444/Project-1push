@@ -118,6 +118,19 @@ app.post('/api/status', (req, res) => {
   res.json(powerStatus);
 });
 
+app.post('/api/timer', (req, res) => {
+  const { zone, crop, minutes } = req.body;
+  const duration = Number(minutes) || 30;
+  notifications.unshift({
+    id: `n${Date.now()}`,
+    title: 'Pump timer started',
+    message: `Timer started for ${duration} minutes in ${zone} (${crop}).`, 
+    time: 'Just now',
+    type: 'timer',
+  });
+  res.json({ zone, crop, minutes: duration, startedAt: new Date().toISOString() });
+});
+
 const port = process.env.PORT || 4000;
 app.listen(port, () => {
   console.log(`Backend API running at http://localhost:${port}`);
