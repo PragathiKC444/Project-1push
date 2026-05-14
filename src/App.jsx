@@ -32,8 +32,13 @@ function App() {
   const [selectedZone, setSelectedZone] = useState(zones[0]);
   const [timerActive, setTimerActive] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(0);
+  const [timerDuration, setTimerDuration] = useState(0);
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const timerPercent = timerActive && timerDuration > 0
+    ? Math.round((1 - timeRemaining / timerDuration) * 100)
+    : 0;
 
   const freshness = useMemo(() => {
     if (!status) return 'Loading...';
@@ -160,6 +165,7 @@ function App() {
       });
       const timerData = await response.json();
       setTimerActive(true);
+      setTimerDuration(timerData.minutes * 60);
       setTimeRemaining(timerData.minutes * 60);
       setMessage(`Pump timer started for ${timerData.minutes} minutes in ${selectedZone}.`);
       setStatus((current) => ({
@@ -313,6 +319,15 @@ function App() {
             {timerActive ? 'RESTART TIMER' : 'START TIMER'}
           </button>
         </div>
+
+        {timerActive && (
+          <div className="timer-progress-row">
+            <div className="timer-progress-bar">
+              <div className="timer-progress-fill" style={{ width: `${timerPercent}%` }} />
+            </div>
+            <span>{Math.floor(timeRemaining / 60)}:{String(timeRemaining % 60).padStart(2, '0')} remaining</span>
+          </div>
+        )}
 
         <div className="timer-help">For optimal irrigation</div>
       </section>
