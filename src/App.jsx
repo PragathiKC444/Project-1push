@@ -1,5 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 
+const zones = [
+  'Rampur Village',
+  'North Field',
+  'South Plot',
+  'East Boundary',
+  'West Junction',
+];
+
 const cropPresets = [
   { name: 'Paddy (Rice)', minutes: 90 },
   { name: 'Wheat', minutes: 45 },
@@ -21,6 +29,8 @@ function App() {
   const [status, setStatus] = useState(null);
   const [cropType, setCropType] = useState(cropPresets[0].name);
   const [customMinutes, setCustomMinutes] = useState('90');
+  const [selectedZone, setSelectedZone] = useState(zones[0]);
+  const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
   const freshness = useMemo(() => {
@@ -113,9 +123,30 @@ function App() {
       });
       const updated = await response.json();
       setStatus(updated);
+      setMessage(`Power turned ${value ? 'ON' : 'OFF'} successfully.`);
     } catch (error) {
       console.error(error);
+      setMessage('Unable to update status. Try again later.');
     }
+  };
+
+  const handleSelectZone = () => {
+    setView('map');
+    setMessage('Select a zone from the map overview.');
+  };
+
+  const handleStartTimer = () => {
+    const minutes = Number(timerMinutes);
+    setMessage(`Pump timer started for ${minutes} minutes in ${selectedZone}.`);
+    setStatus((current) => ({
+      ...current,
+      lastUpdated: new Date().toISOString(),
+    }));
+  };
+
+  const handleQuickAction = (action) => {
+    setMessage(`Opening ${action.replace('-', ' ')}.`);
+    setView(action);
   };
 
   const renderHome = () => (
@@ -123,10 +154,10 @@ function App() {
       <section className="zone-card">
         <div>
           <div className="zone-label">Your Zone</div>
-          <div className="zone-title">{profile?.community || 'Rampur Village'}</div>
+          <div className="zone-title">{selectedZone || profile?.community || 'Rampur Village'}</div>
           <div className="zone-subtitle">Transformer: TR-05</div>
         </div>
-        <button className="select-zone">▾</button>
+        <button className="select-zone" type="button" onClick={handleSelectZone}>▾</button>
       </section>
 
       <section className="power-card">
@@ -205,26 +236,30 @@ function App() {
             <div className="timer-summary-label">Recommended Duration</div>
             <div className="timer-summary-value">{preset} mins</div>
           </div>
-          <button className="btn start-timer">START TIMER</button>
+          <button className="btn start-timer" type="button" onClick={handleStartTimer}>
+            START TIMER
+          </button>
         </div>
 
         <div className="timer-help">For optimal irrigation</div>
       </section>
 
+      {message && <div className="toast-message">{message}</div>}
+
       <section className="quick-actions">
-        <button className="action-card-small">
+        <button className="action-card-small" type="button" onClick={() => handleQuickAction('community')}>
           <div className="action-icon blue">👥</div>
           <div>My Community</div>
         </button>
-        <button className="action-card-small">
+        <button className="action-card-small" type="button" onClick={() => handleQuickAction('history')}>
           <div className="action-icon orange">📊</div>
           <div>Power History</div>
         </button>
-        <button className="action-card-small">
+        <button className="action-card-small" type="button" onClick={() => handleQuickAction('tips')}>
           <div className="action-icon purple">💧</div>
           <div>Irrigation Tips</div>
         </button>
-        <button className="action-card-small">
+        <button className="action-card-small" type="button" onClick={() => handleQuickAction('support')}>
           <div className="action-icon teal">🎧</div>
           <div>Help & Support</div>
         </button>
@@ -235,16 +270,35 @@ function App() {
   const renderMap = () => (
     <section className="map-view">
       <div className="section-heading">Zone map overview</div>
+      <div className="map-summary">Selected zone: {selectedZone}</div>
       <div className="map-grid">
         {mapZones.map((zone) => (
-          <div key={zone.id} className="map-card">
+          <button
+            key={zone.id}
+            type="button"
+            className={`map-card ${selectedZone === zone.name ? 'map-card-selected' : ''}`}
+            onClick={() => {
+              setSelectedZone(zone.name);
+              setMessage(`Selected ${zone.name}.`);
+            }}
+          >
             <div className="map-card-heading">{zone.name}</div>
             <div className="map-chip">{zone.status}</div>
             <div className="map-item">Transformer: {zone.transformer}</div>
             <div className="map-item">Last seen: {zone.lastSeen}</div>
             <div className="map-coordinates">{zone.coordinates}</div>
-          </div>
+          </button>
         ))}
+      </div>
+    </section>
+  );
+
+  const renderActionPage = (title, description) => (
+    <section className="info-view">
+      <div className="section-heading">{title}</div>
+      <div className="info-card">
+        <p>{description}</p>
+        <div className="info-footer">Tap the bottom navigation or Home to return.</div>
       </div>
     </section>
   );
@@ -299,7 +353,9 @@ function App() {
   return (
     <div className="app-shell mobile-layout">
       <header className="topbar">
-        <button className="icon-btn">☰</button>
+        <button className="icon-btn" type="button" onClick={() => setView('home')}>
+          ☰
+        </button>
         <div className="brand-row">
           <div className="brand-icon-circle">⚡</div>
           <div>
@@ -307,7 +363,7 @@ function App() {
             <p className="brand-subtitle">Community Power. Better Farming.</p>
           </div>
         </div>
-        <button className="icon-btn notification-btn" onClick={() => setView('alerts')}>
+        <button className="icon-btn notification-btn" type="button" onClick={() => setView('alerts')}>
           🔔
           <span className="badge">{notifications.length}</span>
         </button>
@@ -321,6 +377,10 @@ function App() {
           {view === 'map' && renderMap()}
           {view === 'alerts' && renderAlerts()}
           {view === 'profile' && renderProfile()}
+          {view === 'community' && renderActionPage('My Community', 'Manage local power sharing, farmer groups, and field support schedules here.')}
+          {view === 'history' && renderActionPage('Power History', 'View the latest status changes, outage reports, and usage trends in your area.')}
+          {view === 'tips' && renderActionPage('Irrigation Tips', 'Get crop-specific irrigation guidance, water-saving pointers, and best practices for your zone.')}
+          {view === 'support' && renderActionPage('Help & Support', 'Contact local support, log a request, or get quick answers to your field questions.')}
         </div>
       )}
 

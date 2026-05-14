@@ -698,7 +698,39 @@ body {
   text-align: center;
   color: #4d5c7a;
   margin-top: 16px;
-  font-weight: 600;
+}
+
+.toast-message {
+  margin-top: 14px;
+  padding: 14px 16px;
+  background: #e9f8e8;
+  border: 1px solid #b4e0b4;
+  border-radius: 20px;
+  color: #1d5c29;
+  font-weight: 700;
+}
+
+.map-card-selected {
+  border: 2px solid #1f7f31;
+}
+
+.info-view {
+  margin-top: 10px;
+}
+
+.info-card {
+  background: #fff;
+  border-radius: 26px;
+  padding: 24px;
+  box-shadow: 0 20px 42px rgba(15, 29, 63, 0.08);
+  color: #243d32;
+  line-height: 1.7;
+}
+
+.map-summary {
+  margin-top: 8px;
+  color: #45614f;
+  font-weight: 700;
 }
 
 @media (max-width: 720px) {
