@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- High contrast colors for outdoor visibility -->
+    <color name="power_on_bg">#00AA00</color>
+    <color name="power_on_text">#FFFFFF</color>
+    <color name="power_off_bg">#DD0000</color>
+    <color name="power_off_text">#FFFFFF</color>
+    <color name="primary">#1565C0</color>
+    <color name="primary_dark">#0D47A1</color>
+    <color name="accent">#FF9800</color>
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    <color name="background">#FFFFFF</color>
+    <color name="divider">#BDBDBD</color>
+    <color name="warning">#FFA500</color>
+</resources>
