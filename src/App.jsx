@@ -1,12 +1,4 @@
-import { useMemo, useState } from 'react';
-
-const zones = [
-  'Rampur Village',
-  'North Field',
-  'South Plot',
-  'East Boundary',
-  'West Junction',
-];
+import { useEffect, useMemo, useState } from 'react';
 
 const cropPresets = [
   { name: 'Paddy (Rice)', minutes: 90 },
@@ -15,28 +7,58 @@ const cropPresets = [
   { name: 'Cotton', minutes: 60 },
 ];
 
+const apiBase = import.meta.env.VITE_API_BASE || 'http://localhost:4000';
+
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
+  const [view, setView] = useState('home');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
-  const [selectedZone, setSelectedZone] = useState(zones[0]);
-  const [powerOn, setPowerOn] = useState(true);
-  const [lastUpdated, setLastUpdated] = useState(new Date(Date.now() - 10 * 60000));
+  const [profile, setProfile] = useState(null);
+  const [notifications, setNotifications] = useState([]);
+  const [mapZones, setMapZones] = useState([]);
+  const [status, setStatus] = useState(null);
   const [cropType, setCropType] = useState(cropPresets[0].name);
   const [customMinutes, setCustomMinutes] = useState('90');
+  const [loading, setLoading] = useState(false);
 
   const freshness = useMemo(() => {
-    const diff = Math.floor((Date.now() - lastUpdated.getTime()) / 60000);
+    if (!status) return 'Loading...';
+    const diff = Math.floor((Date.now() - new Date(status.lastUpdated).getTime()) / 60000);
     if (diff === 0) return 'Just now';
     if (diff === 1) return '1 minute ago';
     return `${diff} minutes ago`;
-  }, [lastUpdated]);
+  }, [status]);
 
   const preset = cropPresets.find((item) => item.name === cropType)?.minutes || 30;
   const timerMinutes = customMinutes || preset;
 
-  const handleLogin = (event) => {
+  useEffect(() => {
+    if (!loggedIn) return;
+    setLoading(true);
+    Promise.all([
+      fetch(`${apiBase}/api/profile`).then((res) => res.json()),
+      fetch(`${apiBase}/api/notifications`).then((res) => res.json()),
+      fetch(`${apiBase}/api/map`).then((res) => res.json()),
+      fetch(`${apiBase}/api/status`).then((res) => res.json()),
+    ])
+      .then(([profileData, notificationsData, mapData, statusData]) => {
+        setProfile(profileData);
+        setNotifications(notificationsData);
+        setMapZones(mapData);
+        setStatus(statusData);
+        if (mapData.length) {
+          setCropType(cropPresets[0].name);
+        }
+      })
+      .catch(() => {
+        setLoginError('Unable to load backend data.');
+      })
+      .finally(() => setLoading(false));
+  }, [loggedIn]);
+
+  const handleLogin = async (event) => {
     event.preventDefault();
     if (!email.trim() || !password.trim()) {
       setLoginError('Enter a valid email and password.');
@@ -46,8 +68,28 @@ function App() {
       setLoginError('Enter a valid email address.');
       return;
     }
-    setLoginError('');
-    setLoggedIn(true);
+
+    try {
+      setLoginError('');
+      const response = await fetch(`${apiBase}/api/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        setLoginError(error.message || 'Login failed.');
+        return;
+      }
+
+      const data = await response.json();
+      setProfile(data.profile);
+      setLoggedIn(true);
+      setView('home');
+    } catch (error) {
+      setLoginError('Backend is not available. Start the server with npm run backend.');
+    }
   };
 
   const handleLogout = () => {
@@ -55,78 +97,33 @@ function App() {
     setEmail('');
     setPassword('');
     setLoginError('');
+    setProfile(null);
+    setNotifications([]);
+    setMapZones([]);
+    setStatus(null);
   };
 
-  const handleToggle = (value) => {
-    setPowerOn(value);
-    setLastUpdated(new Date());
+  const handleToggle = async (value) => {
+    if (!status) return;
+    try {
+      const response = await fetch(`${apiBase}/api/status`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ powerOn: value }),
+      });
+      const updated = await response.json();
+      setStatus(updated);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  if (!loggedIn) {
-    return (
-      <div className="app-shell">
-        <section className="login-card">
-          <div className="login-header">
-            <div className="brand-icon">⚡</div>
-            <div>
-              <p className="eyebrow">Grama-Urja</p>
-              <h1>Welcome back</h1>
-              <p className="login-copy">Sign in to manage your village power and irrigation updates.</p>
-            </div>
-          </div>
-
-          <form className="login-form" onSubmit={handleLogin}>
-            <label htmlFor="login-email">Email</label>
-            <input
-              id="login-email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-            />
-
-            <label htmlFor="login-password">Password</label>
-            <input
-              id="login-password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-            />
-
-            {loginError && <div className="login-error">{loginError}</div>}
-
-            <button type="submit" className="btn login-button">
-              Sign In
-            </button>
-            <p className="login-help">Demo login: any valid email and password will work.</p>
-          </form>
-        </section>
-      </div>
-    );
-  }
-
-  return (
-    <div className="app-shell mobile-layout">
-      <header className="topbar">
-        <button className="icon-btn">☰</button>
-        <div className="brand-row">
-          <div className="brand-icon-circle">⚡</div>
-          <div>
-            <p className="brand-title">Grama-Urja</p>
-            <p className="brand-subtitle">Community Power. Better Farming.</p>
-          </div>
-        </div>
-        <button className="icon-btn notification-btn">
-          🔔
-          <span className="badge">3</span>
-        </button>
-      </header>
-
+  const renderHome = () => (
+    <>
       <section className="zone-card">
         <div>
           <div className="zone-label">Your Zone</div>
-          <div className="zone-title">{selectedZone}</div>
+          <div className="zone-title">{profile?.community || 'Rampur Village'}</div>
           <div className="zone-subtitle">Transformer: TR-05</div>
         </div>
         <button className="select-zone">▾</button>
@@ -137,13 +134,13 @@ function App() {
           <div>
             <div className="power-card-label">CURRENT POWER STATUS</div>
             <div className="power-card-status">POWER IS</div>
-            <div className="power-card-value">{powerOn ? 'ON' : 'OFF'}</div>
+            <div className="power-card-value">{status?.powerOn ? 'ON' : 'OFF'}</div>
           </div>
           <div className="power-icon-circle">⚡</div>
         </div>
 
         <div className="status-footer">
-          <div>Confirmed by 23 users in your zone</div>
+          <div>Confirmed by {status?.confirmedBy || 0} users in your zone</div>
           <div className="thank-you">Thank you! 💛</div>
         </div>
       </section>
@@ -164,7 +161,7 @@ function App() {
         <div className="status-options">
           <button
             type="button"
-            className={`status-option ${!powerOn ? 'status-off-card' : ''}`}
+            className={`status-option ${status?.powerOn ? '' : 'status-off-card'}`}
             onClick={() => handleToggle(false)}
           >
             <span className="status-icon">⏻</span>
@@ -173,7 +170,7 @@ function App() {
           </button>
           <button
             type="button"
-            className={`status-option ${powerOn ? 'status-on-card' : ''}`}
+            className={`status-option ${status?.powerOn ? 'status-on-card' : ''}`}
             onClick={() => handleToggle(true)}
           >
             <span className="status-icon">⏻</span>
@@ -232,21 +229,115 @@ function App() {
           <div>Help & Support</div>
         </button>
       </section>
+    </>
+  );
+
+  const renderMap = () => (
+    <section className="map-view">
+      <div className="section-heading">Zone map overview</div>
+      <div className="map-grid">
+        {mapZones.map((zone) => (
+          <div key={zone.id} className="map-card">
+            <div className="map-card-heading">{zone.name}</div>
+            <div className="map-chip">{zone.status}</div>
+            <div className="map-item">Transformer: {zone.transformer}</div>
+            <div className="map-item">Last seen: {zone.lastSeen}</div>
+            <div className="map-coordinates">{zone.coordinates}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+
+  const renderAlerts = () => (
+    <section className="alerts-view">
+      <div className="section-heading">Notifications</div>
+      {notifications.map((note) => (
+        <div key={note.id} className="notification-card">
+          <div className="notification-title">{note.title}</div>
+          <div className="notification-time">{note.time}</div>
+          <p className="notification-message">{note.message}</p>
+        </div>
+      ))}
+    </section>
+  );
+
+  const renderProfile = () => (
+    <section className="profile-view">
+      <div className="section-heading">My Profile</div>
+      <div className="profile-card">
+        <div className="profile-avatar">{profile?.name?.charAt(0)}</div>
+        <div>
+          <div className="profile-name">{profile?.name}</div>
+          <div className="profile-role">{profile?.role}</div>
+        </div>
+      </div>
+      <div className="profile-details">
+        <div className="profile-detail-row">
+          <span>Email</span>
+          <strong>{profile?.email}</strong>
+        </div>
+        <div className="profile-detail-row">
+          <span>Phone</span>
+          <strong>{profile?.phone}</strong>
+        </div>
+        <div className="profile-detail-row">
+          <span>Community</span>
+          <strong>{profile?.community}</strong>
+        </div>
+        <div className="profile-detail-row">
+          <span>Zones managed</span>
+          <strong>{profile?.zonesManaged?.join(', ')}</strong>
+        </div>
+      </div>
+      <button className="btn logout-button" onClick={handleLogout}>
+        Log out
+      </button>
+    </section>
+  );
+
+  return (
+    <div className="app-shell mobile-layout">
+      <header className="topbar">
+        <button className="icon-btn">☰</button>
+        <div className="brand-row">
+          <div className="brand-icon-circle">⚡</div>
+          <div>
+            <p className="brand-title">Grama-Urja</p>
+            <p className="brand-subtitle">Community Power. Better Farming.</p>
+          </div>
+        </div>
+        <button className="icon-btn notification-btn" onClick={() => setView('alerts')}>
+          🔔
+          <span className="badge">{notifications.length}</span>
+        </button>
+      </header>
+
+      {loading ? (
+        <div className="loading-state">Loading content...</div>
+      ) : (
+        <div>
+          {view === 'home' && renderHome()}
+          {view === 'map' && renderMap()}
+          {view === 'alerts' && renderAlerts()}
+          {view === 'profile' && renderProfile()}
+        </div>
+      )}
 
       <nav className="bottom-nav">
-        <button className="nav-item active">
+        <button className={`nav-item ${view === 'home' ? 'active' : ''}`} onClick={() => setView('home')}>
           <span>🏠</span>
           <div>Home</div>
         </button>
-        <button className="nav-item">
+        <button className={`nav-item ${view === 'map' ? 'active' : ''}`} onClick={() => setView('map')}>
           <span>📍</span>
           <div>Map</div>
         </button>
-        <button className="nav-item">
+        <button className={`nav-item ${view === 'alerts' ? 'active' : ''}`} onClick={() => setView('alerts')}>
           <span>🔔</span>
           <div>Alerts</div>
         </button>
-        <button className="nav-item">
+        <button className={`nav-item ${view === 'profile' ? 'active' : ''}`} onClick={() => setView('profile')}>
           <span>👤</span>
           <div>Profile</div>
         </button>

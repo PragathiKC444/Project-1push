@@ -558,6 +558,142 @@ body {
   }
 }
 
+.loading-state {
+  padding: 40px 0;
+  text-align: center;
+  color: #2f513c;
+  font-weight: 700;
+}
+
+.map-view,
+.alerts-view,
+.profile-view {
+  margin-top: 10px;
+}
+
+.map-grid {
+  display: grid;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.map-card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 18px;
+  box-shadow: 0 20px 40px rgba(15, 29, 63, 0.08);
+}
+
+.map-card-heading {
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.map-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #e6f7ea;
+  color: #1f7f31;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.map-item,
+.notification-time,
+.profile-detail-row span {
+  color: #5e725e;
+  font-size: 0.9rem;
+}
+
+.map-coordinates {
+  margin-top: 10px;
+  color: #4a624a;
+  font-weight: 700;
+}
+
+.notification-card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 18px;
+  box-shadow: 0 20px 40px rgba(15, 29, 63, 0.08);
+  margin-top: 14px;
+}
+
+.notification-title {
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.notification-message {
+  margin: 10px 0 0;
+  color: #475a4a;
+  line-height: 1.6;
+}
+
+.notification-time {
+  font-size: 0.85rem;
+  color: #6a7f6a;
+}
+
+.profile-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #fff;
+  border-radius: 24px;
+  padding: 18px;
+  box-shadow: 0 20px 40px rgba(15, 29, 63, 0.08);
+  margin-top: 16px;
+}
+
+.profile-avatar {
+  width: 62px;
+  height: 62px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #1f7f31 0%, #29c771 100%);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.profile-name {
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.profile-role {
+  color: #4b6c51;
+  margin-top: 4px;
+}
+
+.profile-details {
+  margin-top: 18px;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 18px;
+  box-shadow: 0 20px 40px rgba(15, 29, 63, 0.08);
+}
+
+.profile-detail-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.profile-detail-row strong {
+  color: #1f4a2e;
+}
+
+.nav-item.active {
+  background: #e7f6e6;
+  color: #1e6d35;
+}
+
 .footer-note {
   text-align: center;
   color: #4d5c7a;
